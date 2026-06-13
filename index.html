@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会社の業務を、どう自動化していくか — 進め方</title>
+<meta name="description" content="会社の業務をAIで自動化していくときの考え方・1業務ずつ進める手順・ロードマップ・実証をまとめた現場発の進め方。">
+<meta property="og:title" content="会社の業務を、どう自動化していくか — 進め方">
+<meta property="og:description" content="考え方の4原則・1業務ずつ回す5ステップ・3フェーズのロードマップ・実証（見積請求の自動化）を1枚に。">
+<meta property="og:type" content="article">
+<style>
+  :root{
+    --ink:#1a1d23; --sub:#5c6370; --line:#e6e8ec; --bg:#fafbfc; --card:#ffffff;
+    --accent:#0f62fe; --accent-soft:#eef4ff;
+    --green:#0b3d2e; --green-soft:#e8f2ed;
+    --hi:#0f8a4c; --hi-soft:#e8f5ee;
+    --mid:#b07a00; --mid-soft:#fdf3dd;
+    --low:#9aa1ab; --low-soft:#f1f2f4;
+    --mono:"SF Mono","Menlo","Consolas",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:var(--bg);line-height:1.78;font-size:15px}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 28px 120px}
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:34px;font-weight:800;letter-spacing:.01em;line-height:1.32}
+  .lede{margin-top:18px;color:var(--sub);font-size:16px;max-width:780px}
+  .meta{margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--sub)}
+  section{margin-top:62px}
+  h2{font-size:22px;font-weight:800;display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  h2 .num{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600}
+  .sec-lede{color:var(--sub);margin-bottom:26px;max-width:800px}
+  .premise{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+  .premise .p{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+  .premise .p .n{font-family:var(--mono);font-size:12px;color:var(--accent);margin-bottom:8px}
+  .premise .p .t{font-weight:800;font-size:16px;margin-bottom:8px;line-height:1.5}
+  .premise .p .d{font-size:13.5px;color:var(--sub)}
+  .principles{margin-top:22px;display:grid;gap:12px}
+  .principle{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--green);border-radius:0 12px 12px 0;padding:18px 22px;display:flex;gap:18px;align-items:flex-start}
+  .principle .pn{font-family:var(--mono);font-weight:800;color:var(--green-soft);background:var(--green);width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:15px}
+  .principle .pt{font-weight:800;font-size:15.5px;margin-bottom:3px}
+  .principle .pd{font-size:13.5px;color:var(--sub)}
+  .cycle{margin-top:26px;display:grid;gap:0}
+  .cstep{display:flex;gap:0;align-items:stretch}
+  .cstep .badge{flex:0 0 120px;background:var(--green);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:18px 8px;border-bottom:2px solid #fff}
+  .cstep:first-child .badge{border-radius:12px 0 0 0}
+  .cstep:last-child .badge{border-radius:0 0 0 12px;border-bottom:none}
+  .cstep .badge .s{font-family:var(--mono);font-size:11px;opacity:.75;letter-spacing:.1em}
+  .cstep .badge .v{font-size:17px;font-weight:800;margin-top:2px}
+  .cstep .body{flex:1;background:var(--card);border:1px solid var(--line);border-left:none;padding:16px 22px;border-bottom:none}
+  .cstep:first-child .body{border-radius:0 12px 0 0}
+  .cstep:last-child .body{border-radius:0 0 12px 0;border-bottom:1px solid var(--line)}
+  .cstep .body .t{font-weight:800;font-size:15.5px;margin-bottom:3px}
+  .cstep .body .d{font-size:13.5px;color:var(--sub)}
+  .cstep .body .who{font-family:var(--mono);font-size:11px;color:var(--accent);margin-top:6px}
+  .gate{background:var(--mid-soft);border-color:var(--mid)!important}
+  .gate .badge{background:var(--mid)}
+  .ph{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+  .phase.now{border:2px solid var(--green)}
+  .phase .ph-h{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:4px}
+  .phase .ph-t{font-weight:800;font-size:15.5px;margin-bottom:14px;line-height:1.45}
+  .phase ul{list-style:none}
+  .phase li{padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;display:flex;gap:10px;align-items:flex-start}
+  .phase li:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);margin-top:8px;flex:0 0 auto}
+  .phase li.done:before{background:var(--hi)}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:1px 7px;border-radius:5px;margin-left:auto;white-space:nowrap}
+  .tag-done{background:var(--hi-soft);color:var(--hi)}
+  .proof{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;margin-top:24px;overflow:hidden}
+  .proof .head{background:var(--green);color:#fff;padding:18px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .proof .head .badge{font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:6px;letter-spacing:.08em}
+  .proof .head .title{font-size:18px;font-weight:800}
+  .proof .head .status{margin-left:auto;font-size:13px;font-weight:700}
+  .proof .b{padding:24px 26px}
+  .proof .flow2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+  .proof .chip{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600}
+  .proof .chip.in{border-color:var(--accent);color:var(--accent)}
+  .proof .chip.out{border-color:var(--green);color:var(--green)}
+  .proof .arr{color:var(--low);font-weight:800}
+  .proof .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:6px}
+  .proof .stat{text-align:center;padding:10px}
+  .proof .stat .v{font-size:26px;font-weight:800;font-family:var(--mono);color:var(--green)}
+  .proof .stat .l{font-size:11.5px;color:var(--sub);margin-top:4px}
+  .checks{margin-top:20px;display:grid;gap:8px}
+  .check{display:flex;gap:10px;font-size:13.5px;align-items:flex-start}
+  .check .ck{color:var(--hi);font-weight:800;flex:0 0 auto}
+  .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:16px 22px;margin:18px 0;font-size:14px}
+  .note b{color:var(--accent)}
+  footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--sub)}
+  a{color:var(--accent);text-decoration:none}
+  @media(max-width:860px){.premise,.ph,.proof .grid{grid-template-columns:1fr}.cstep .badge{flex-basis:90px}h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">How we automate · 進め方</div>
+  <h1>会社の業務を、どう自動化していくか</h1>
+  <p class="lede">会社の業務をAIで自動化していくときに、どういう順番・どういうやり方で進めるのかをまとめました。考え方・1業務ずつ進める手順・全体ロードマップ、そして「もう1個目が実際に動いている」実証まで、これ1枚で伝わるようにしています。机上の計画ではなく、現場で1つ動かしながら整理した進め方です。</p>
+  <div class="meta">2026-06-13 ｜ RYOSEIWORLD合同会社</div>
+</header>
+
+<section>
+  <h2><span class="num">01</span>なぜ今やれるのか</h2>
+  <p class="sec-lede">ゼロから始めるわけではありません。3つの条件がすでに揃っています。</p>
+  <div class="premise">
+    <div class="p">
+      <div class="n">前提 1</div>
+      <div class="t">現状地図ができた</div>
+      <div class="d">社内の業務を棚卸しし、誰が・何を・どの頻度でやっているかを洗い出し済み。どこから手を付ければいちばん効くかが見えています。</div>
+    </div>
+    <div class="p">
+      <div class="n">前提 2</div>
+      <div class="t">すでにいくつも動いている</div>
+      <div class="d">議事録・通知・日程調整は、ノーコードツールや会議AIですでに自動化済み。新しい文化を持ち込むのではなく、この上に積みます。</div>
+    </div>
+    <div class="p">
+      <div class="n">前提 3</div>
+      <div class="t">やりたいことは書いてある</div>
+      <div class="d">自動化したい業務は、すでにチャットやメモに「これ自動化したい」という形で残っています。新しく要件を発明する必要はなく、拾って作るだけの状態です。</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span>自動化の考え方（4つの原則）</h2>
+  <p class="sec-lede">何を作るにも、この4つを外しません。</p>
+  <div class="principles">
+    <div class="principle">
+      <div class="pn">1</div>
+      <div><div class="pt">入口と出口は自動、真ん中を埋める</div>
+      <div class="pd">議事録・通知・予約は自動で「届く」のに、その後のタスク化・転記・返信・督促・集計が手作業で残りがちです。この“真ん中”を埋めるのが一番効きます。</div></div>
+    </div>
+    <div class="principle">
+      <div class="pn">2</div>
+      <div><div class="pt">既存の仕組みに乗せる</div>
+      <div class="pd">新しいツールを増やすほど運用が重くなります。すでに使っている会計ソフト・CRM・チャット・ノーコードツールに繋ぐことを優先します。</div></div>
+    </div>
+    <div class="principle">
+      <div class="pn">3</div>
+      <div><div class="pt">下書きまで自動・最後のボタンは人</div>
+      <div class="pd">送信・支払い・計上・公開といった「取り返しのつかない操作」は、必ず人が確認して押します。AIは直前まで用意するだけ。これがAIに任せない一線です。</div></div>
+    </div>
+    <div class="principle">
+      <div class="pn">4</div>
+      <div><div class="pt">新しく考えず、要望を拾う</div>
+      <div class="pd">現場が「これ自動化したい」と言っていることを、そのまま形にします。机上の理想ではなく、実際に困っている順に潰します。</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">03</span>1つの業務を自動化する手順</h2>
+  <p class="sec-lede">業務ごとに、この5ステップのサイクルを回します。1個あたり数時間〜半日でプロトタイプまで行きます。</p>
+  <div class="cycle">
+    <div class="cstep">
+      <div class="badge"><div class="s">STEP 1</div><div class="v">拾う</div></div>
+      <div class="body"><div class="t">困りごと・依頼を特定する</div><div class="d">現場から「手作業で繰り返している定型業務」を1つ選ぶ。頻度が高く、型が決まっているものから。</div></div>
+    </div>
+    <div class="cstep">
+      <div class="badge"><div class="s">STEP 2</div><div class="v">作る</div></div>
+      <div class="body"><div class="t">プロトタイプを作る</div><div class="d">まず手元（ローカル）で、ダミーデータを使って動くものを作る。本番のデータや口座には一切触れない。</div><div class="who">担当: AI（実装）</div></div>
+    </div>
+    <div class="cstep">
+      <div class="badge"><div class="s">STEP 3</div><div class="v">確かめる</div></div>
+      <div class="body"><div class="t">品質を確認する</div><div class="d">出力を1枚ずつ目視。金額の計算、宛名や名義の正しさ、誤りが混ざっていないかをチェック。確定していない項目はわざと「未確定」と分かる形にして、誤って使われないようにする。</div><div class="who">担当: AI（点検）＋人（中身の確認）</div></div>
+    </div>
+    <div class="cstep gate">
+      <div class="badge"><div class="s">STEP 4</div><div class="v">承認</div></div>
+      <div class="body"><div class="t">人がボタンを押す</div><div class="d">送る・払う・計上する・公開する、の最後の操作は必ず人が判断して実行する。ここがAIに任せない一線。</div><div class="who">担当: 人のみ</div></div>
+    </div>
+    <div class="cstep">
+      <div class="badge"><div class="s">STEP 5</div><div class="v">本番化</div></div>
+      <div class="body"><div class="t">既存ツールに繋ぐ</div><div class="d">確認が取れたら、会計ソフト・CRM・チャットなど今使っているツールに接続して、日々の業務に組み込む。</div></div>
+    </div>
+  </div>
+  <div class="note"><b>このサイクルのキモ。</b>「全部を一気に自動化」ではなく、1業務ずつ・小さく・安全に積み上げます。1個動かすたびに現場の手が空き、その実感が次の自動化を呼びます。</div>
+</section>
+
+<section>
+  <h2><span class="num">04</span>全体ロードマップ</h2>
+  <p class="sec-lede">「頻度 × 定型度 × 経営インパクト」で並べた3フェーズ。Phase 1は既存の仕組みに乗せるだけで動き、Phase 2が決算や対応の早期化に効きます。</p>
+  <div class="ph">
+    <div class="phase now">
+      <div class="ph-h">PHASE 1 — まず今</div>
+      <div class="ph-t">定型業務を楽にする（即効・低リスク）</div>
+      <ul>
+        <li class="done">見積書・請求書の自動作成<span class="tag tag-done">動いた</span></li>
+        <li>議事録のやることを自動でタスク化</li>
+        <li>週次の数字レポートの自動投稿</li>
+        <li>定例の週次レポートの本番運用化</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h">PHASE 2 — 1〜2ヶ月</div>
+      <div class="ph-t">決算と対応のボトルネックを潰す</div>
+      <ul>
+        <li>売上の月割按分・入金突合の自動化</li>
+        <li>問い合わせの開封→振り分け→下書き→記録</li>
+        <li>イベント告知物の一括生成</li>
+        <li>動画コンテンツの編集後処理</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="ph-h">PHASE 3 — 四半期</div>
+      <div class="ph-t">攻めの自動化</div>
+      <ul>
+        <li>営業の下書き支援（情報収集→対象抽出→下書き）</li>
+        <li>解約予兆の検知と継続提案の下書き</li>
+        <li>申請書類の下書き自動生成</li>
+        <li>社内IT依頼のチケット化・台帳化</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">05</span>実証 — もう1個目が動いています</h2>
+  <p class="sec-lede">机上の計画ではありません。Phase 1の最初の1つ、見積・請求の自動作成が、すでにこの手順で動いています。</p>
+  <div class="proof">
+    <div class="head">
+      <span class="badge">PHASE 1 / 01</span>
+      <span class="title">見積・請求ジェネレーター</span>
+      <span class="status">プロトタイプ完成</span>
+    </div>
+    <div class="b">
+      <div class="flow2">
+        <span class="chip in">チャットの依頼テキスト</span>
+        <span class="arr">→</span>
+        <span class="chip">AIが読み取り・計算</span>
+        <span class="arr">→</span>
+        <span class="chip out">見積書／請求書のPDF</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--sub);margin-bottom:6px">「◯◯株式会社 5名様 見積書お願いします」のような普段どおりの依頼文を渡すと、整ったPDFが一発で出ます。実際の依頼5件で試して、6枚のPDFを生成・確認しました。</p>
+      <div class="grid">
+        <div class="stat"><div class="v">5</div><div class="l">入力した依頼の種類</div></div>
+        <div class="stat"><div class="v">6</div><div class="l">生成したPDF（見積＋請求）</div></div>
+        <div class="stat"><div class="v">数秒</div><div class="l">1枚あたりの生成時間</div></div>
+        <div class="stat"><div class="v">0円</div><div class="l">追加ツール費用（手元で完結）</div></div>
+      </div>
+      <div class="checks">
+        <div class="check"><span class="ck">✓</span><span>正式名義・代表者・振込先が正しく入る（発行元を取り違えていないか確認済み）</span></div>
+        <div class="check"><span class="ck">✓</span><span>人数×単価＋消費税の計算が正確</span></div>
+        <div class="check"><span class="ck">✓</span><span>まだ確定していない項目（正式な料金・住所・登録番号など）は「未確定」と分かる形で出し、そのまま客先に出ない安全設計</span></div>
+        <div class="check"><span class="ck">✓</span><span>送付・会計ソフトへの計上は実装せず、人が確認して行う（原則3の承認ゲート）</span></div>
+      </div>
+      <p style="font-size:13px;color:var(--sub);margin-top:18px">次の一手は、正式な料金と発行者情報を入れれば、そのまま客先品質に。さらに自然な依頼文の揺れにも強くしていきます。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">06</span>速く・正確に作るやり方</h2>
+  <p class="sec-lede">作る量が多いので、作業を分担しています。</p>
+  <div class="principles">
+    <div class="principle">
+      <div class="pn">A</div>
+      <div><div class="pt">作るのは複数のAIで分担、確認は別のAIと人で</div>
+      <div class="pd">実装は手数の出るAIに任せ、出来上がりの品質チェック（計算・名義・安全性）は上位のAIと人がやる二段構え。これでスピードと正確さを両立します。</div></div>
+    </div>
+    <div class="principle">
+      <div class="pn">B</div>
+      <div><div class="pt">見せる用と動かす用を分ける</div>
+      <div class="pd">まず手元で動くものを作って実感してもらい、本番は確認が取れてから繋ぎます。いきなり本番データを触らないので安全です。</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">07</span>次にやること</h2>
+  <p class="sec-lede">Phase 1の残りを、同じ5ステップで順に動かします。</p>
+  <div class="premise">
+    <div class="p"><div class="n">次 1</div><div class="t">議事録 → タスク化</div><div class="d">自動で届く議事録から「やること」を抜き出し、担当・期限つきで通知。今いちばん抜け落ちている“真ん中”です。</div></div>
+    <div class="p"><div class="n">次 2</div><div class="t">週次レポートの自動投稿</div><div class="d">毎週手で集計している数字を自動でまとめて投稿。</div></div>
+    <div class="p"><div class="n">次 3</div><div class="t">定例レポートの本番化</div><div class="d">すでに試作済みのレポートを、毎週決まった時刻に自動で回す状態に。</div></div>
+  </div>
+</section>
+
+<footer>
+  <p>会社の業務をAIで自動化していくときの、考え方と進め方をまとめた資料です。実際に1つの業務（見積・請求書の自動作成）をこの手順で動かしながら整理しました。特定の社名・金額・個人情報は含みません。</p>
+  <p style="margin-top:8px">RYOSEIWORLD合同会社 ｜ 2026-06-13</p>
+</footer>
+
+</div>
+</body>
+</html>
